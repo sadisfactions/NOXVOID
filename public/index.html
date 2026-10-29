@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>GLITCH//CORE — NOXVOID</title>
+  <meta name="description" content="GLITCH//CORE — профиль стримера Dota 2 и расписание трансляций.">
+  <meta name="theme-color" content="#08090B">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="boot" aria-hidden="true"></div>
+  <div class="fx fx-scan" aria-hidden="true"></div>
+  <div class="fx fx-grain" aria-hidden="true"></div>
+  <div class="fx fx-flash" aria-hidden="true"></div>
+  <div class="fx fx-crt" aria-hidden="true"></div>
+
+  <div class="app">
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-logo" data-bind="nickname" data-text="NOXVOID">NOXVOID</span>
+        <span class="brand-sub">ПРОФИЛЬ ИГРОКА</span>
+      </div>
+      <nav class="socials" aria-label="Социальные сети">
+        <a class="soc" data-link="twitch" href="#" target="_blank" rel="noopener noreferrer">Twitch</a>
+        <a class="soc" data-link="youtube" href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
+        <a class="soc" data-link="telegram" href="#" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <span class="status"><span class="dot" aria-hidden="true"></span><span data-bind="statusText">ДЕМО-ДАННЫЕ</span></span>
+      </nav>
+    </header>
+
+    <!-- ОСНОВНОЙ БЛОК -->
+    <main class="stage">
+      <section class="identity">
+        <p class="category"><span class="bar" aria-hidden="true"></span><span data-bind="category">СТРИМЕР DOTA 2</span></p>
+        <h1 class="nick" id="nick"><span data-bind="nickname">NOXVOID</span></h1>
+        <p class="slogan" id="slogan" data-bind="slogan" data-text="">NO META. NO MERCY.</p>
+        <p class="rank"><span class="rank-chip" data-bind="rank">РАНГ: БЕССМЕРТНЫЙ</span></p>
+        <p class="bio-short" data-bind="bioShort"></p>
+        <div class="cta">
+          <a class="btn btn-primary" data-link="twitch" href="#" target="_blank" rel="noopener noreferrer">
+            <span class="btn-label" data-bind="watchLabel" data-text="">Смотреть стрим</span>
+          </a>
+          <button class="btn btn-ghost" id="socialsBtn" type="button" aria-haspopup="dialog" aria-controls="socialsModal">
+            <span class="btn-label" data-bind="socialsLabel" data-text="">Мои сети</span>
+          </button>
+          <button class="btn btn-ghost btn-support" id="supportBtn" type="button" aria-haspopup="dialog" aria-controls="socialsModal">
+            <span class="btn-label" data-bind="supportLabel" data-text="">Поддержать</span>
+          </button>        </div>
+
+        <!-- РАСПИСАНИЕ: дни рисуются из config.js -->
+        <section class="sched" aria-labelledby="sched-title">
+          <div class="sched-head">
+            <h2 id="sched-title">РАСПИСАНИЕ СТРИМОВ</h2>
+            <span class="sched-tz" id="schedTz"></span>
+          </div>
+          <div class="next">
+            <div class="next-l"><span class="next-k">СЛЕДУЮЩИЙ СТРИМ</span><b class="next-when" id="nextWhen">—</b></div>
+            <div class="next-count" id="countdown" role="timer" aria-label="До следующего стрима">
+              <span><b data-u="d">00</b><i>дн</i></span><span><b data-u="h">00</b><i>ч</i></span><span><b data-u="m">00</b><i>мин</i></span><span><b data-u="s">00</b><i>сек</i></span>
+            </div>
+          </div>
+          <ol class="sched-days" id="schedDays"></ol>
+        </section>
+      </section>
+
+      <section class="hero-art" id="art" aria-label="Арт героя">
+        <div class="art-glow" aria-hidden="true"></div>
+        <div class="art-stack">
+          <img class="layer base" id="heroImg" src="assets/hero-placeholder.svg" alt="Заглушка арта героя" decoding="async">
+          <img class="layer ch ch-m" src="assets/hero-placeholder.svg" alt="" aria-hidden="true">
+          <img class="layer ch ch-g" src="assets/hero-placeholder.svg" alt="" aria-hidden="true">
+          <div class="slices" id="slices" aria-hidden="true"></div>
+          <div class="sweep" aria-hidden="true"></div>
+        </div>
+        <span class="tag tag-a" aria-hidden="true">СИГНАЛ 0x4F</span>
+        <span class="tag tag-b" aria-hidden="true">+ 00:42:17</span>
+        <span class="tag tag-c" aria-hidden="true">▲ ЯДРО.РАЗЛОМ</span>
+      </section>
+    </main>
+
+    <!-- НИЖНЯЯ СТРОКА -->
+    <footer class="strip">
+      <span class="strip-item" id="liveItem"><span class="dot dot-sm" aria-hidden="true"></span><span>Сейчас в эфире: <b id="liveText">нет</b></span></span>
+      <span class="strip-item strip-next">Следующий стрим: <b id="nextText">—</b></span>
+      <span class="strip-item strip-id" data-bind="playerId">ИГРОК_001</span>
+      <span class="strip-spacer"></span>
+      <nav class="strip-nav" aria-label="Разделы"><a href="#about">О стримере ↓</a><a href="#moments">Моменты</a></nav>
+    </footer>
+  </div>
+
+  <main class="sections">
+    <section class="sec" id="about" aria-labelledby="t-about">
+      <header class="sec-head reveal"><span class="sec-idx">01 //</span><h2 class="sec-title" id="t-about">О стримере</h2><span class="demo-tag" data-demo>ДЕМО-ДАННЫЕ</span></header>
+      <div class="about-grid">
+        <p class="about-text reveal" id="aboutText"></p>
+        <ul class="facts reveal" id="aboutFacts"></ul>
+      </div>
+    </section>
+
+    <section class="sec" id="moments" aria-labelledby="t-moments">
+      <header class="sec-head reveal"><span class="sec-idx">02 //</span><h2 class="sec-title" id="t-moments">Лучшие моменты</h2><span class="demo-tag" data-demo>ДЕМО-ДАННЫЕ</span></header>
+      <div class="clips" id="momentsGrid"></div>
+    </section>
+
+    <footer class="foot">
+      <span>GLITCH<i>//</i>CORE · шаблон для стримеров Dota 2</span>
+      <a href="#" id="toTop">Наверх ↑</a>
+    </footer>
+  </main>
+  <div class="pg-layer" id="pgLayer" aria-hidden="true"></div>
+
+  <div class="modal" id="socialsModal" role="dialog" aria-modal="true" aria-labelledby="socialsTitle" hidden>
+    <div class="modal-panel" id="socialsPanel">
+      <div class="modal-head">
+        <h2 id="socialsTitle">МОИ СЕТИ</h2>
+        <button class="modal-close" id="socialsClose" type="button" aria-label="Закрыть">✕</button>
+      </div>
+      <ul class="modal-list" id="socialsList"></ul>
+      <p class="modal-note">Нажмите Esc или кликните вне окна, чтобы закрыть</p>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# Скопируйте в файл .dev.vars (он в .gitignore) — только для локального запуска.
+# На Cloudflare эти значения задаются в Settings -> Variables and Secrets.
+ADMIN_PASSWORD=поменяйте-на-свой-пароль
+SESSION_SECRET=случайная-строка-не-короче-32-символов

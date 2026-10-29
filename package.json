@@ -1,0 +1,19 @@
+﻿{
+    "name":  "glitch-core",
+    "private":  true,
+    "version":  "1.0.0",
+    "description":  "GLITCH//CORE: сайт стримера + панель управления расписанием (Cloudflare Pages + D1)",
+    "scripts":  {
+                    "test":  "node --test tests/*.test.mjs",
+                    "test:local":  "node tests/integration.mjs",
+                    "db:local":  "wrangler d1 execute DB --local --config wrangler.local.toml --file=migrations/0001_init.sql",
+                    "dev":  "wrangler pages dev public --d1 DB=00000000-0000-0000-0000-000000000000"
+                },
+    "devDependencies":  {
+                            "wrangler":  "^4.155.0"
+                        },
+    "type":  "module"
+}
+
+
+

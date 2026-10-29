@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <!-- ORIGINAL PLACEHOLDER ART (not from Dota 2). Replace via config.js -> heroImage -->
+    <style>
+    .eye { transform-box: fill-box; transform-origin: center; animation: blink 5.8s infinite; }
+    .eye.r { animation-delay: .05s; }
+    @keyframes blink { 0%,90%,100% { transform: scaleY(1); opacity: 1 } 93% { transform: scaleY(.06); opacity: .6 } 96% { transform: scaleY(1); opacity: .35 } 98% { opacity: 1 } }
+    .rim { animation: neon 3.6s ease-in-out infinite; }
+    .rim.b { animation-duration: 4.7s; animation-delay: -1.5s; }
+    @keyframes neon { 0%,100% { stroke-opacity: 1 } 50% { stroke-opacity: .4 } }
+    .ring { transform-box: fill-box; transform-origin: center; animation: spin 70s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg) } }
+    .aura { animation: breathe 6s ease-in-out infinite; }
+    @keyframes breathe { 0%,100% { opacity: .8 } 50% { opacity: 1 } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important } }
+  </style>  <defs>
+    <radialGradient id="aura" cx="50%" cy="38%" r="50%">
+      <stop offset="0" stop-color="#B52CFF" stop-opacity=".75"/>
+      <stop offset=".55" stop-color="#6b1a9e" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#B52CFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b1228"/>
+      <stop offset="1" stop-color="#0a070f"/>
+    </linearGradient>
+    <linearGradient id="blade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#C6FF00"/>
+      <stop offset=".5" stop-color="#2a3a00"/>
+      <stop offset="1" stop-color="#0b0f00"/>
+    </linearGradient>
+  </defs>
+  <circle class="aura" cx="400" cy="400" r="400" fill="url(#aura)"/>
+  <!-- rift rings -->
+  <circle cx="400" cy="380" r="250" fill="none" stroke="#B52CFF" stroke-opacity=".35" stroke-width="2"/>
+  <circle cx="400" cy="380" r="300" fill="none" stroke="#C6FF00" stroke-opacity=".18" stroke-width="1" stroke-dasharray="6 14" class="ring"/>
+  <!-- blade -->
+  <path d="M655 990 L712 990 L618 60 Z" fill="url(#blade)" stroke="#C6FF00" stroke-width="2"/>
+  <path d="M628 760 L760 760 L760 790 L628 790 Z" fill="#0a070f" stroke="#B52CFF" stroke-width="2"/>
+  <!-- cloak / body -->
+  <path d="M90 1000 L160 650 Q190 540 300 500 L500 500 Q610 540 640 650 L710 1000 Z" fill="url(#body)" stroke="#B52CFF" stroke-width="3"/>
+  <path d="M300 500 L400 760 L500 500" fill="none" stroke="#C6FF00" stroke-opacity=".7" stroke-width="2"/>
+  <path d="M400 760 L400 1000" stroke="#B52CFF" stroke-opacity=".6" stroke-width="2"/>
+  <!-- pauldron spikes -->
+  <path class="rim" d="M175 610 L70 500 L235 560 Z" fill="#120c1c" stroke="#B52CFF" stroke-width="3"/>
+  <path class="rim b" d="M625 610 L730 500 L565 560 Z" fill="#120c1c" stroke="#B52CFF" stroke-width="3"/>
+  <!-- horns -->
+  <path class="rim b" d="M335 300 Q240 290 195 120 Q300 190 350 250 Z" fill="#150f20" stroke="#C6FF00" stroke-width="2.5"/>
+  <path class="rim b" d="M465 300 Q560 290 605 120 Q500 190 450 250 Z" fill="#150f20" stroke="#C6FF00" stroke-width="2.5"/>
+  <!-- helm -->
+  <path class="rim" d="M315 510 L325 330 Q330 235 400 215 Q470 235 475 330 L485 510 Q400 545 315 510 Z" fill="#0f0a17" stroke="#B52CFF" stroke-width="3"/>
+  <path d="M400 215 L400 330" stroke="#C6FF00" stroke-opacity=".6" stroke-width="2"/>
+  <!-- eyes -->
+  <path class="eye" d="M345 365 L388 378 L384 392 L342 384 Z" fill="#C6FF00"/>
+  <path class="eye r" d="M455 365 L412 378 L416 392 L458 384 Z" fill="#C6FF00"/>
+  <path d="M360 450 L440 450" stroke="#B52CFF" stroke-width="3"/>
+  <path d="M370 470 L430 470" stroke="#B52CFF" stroke-width="2" stroke-opacity=".7"/>
+  <!-- chest sigil -->
+  <path d="M400 600 L430 650 L400 700 L370 650 Z" fill="none" stroke="#C6FF00" stroke-width="2"/>
+  <!-- data shards -->
+  <rect x="120" y="300" width="60" height="4" fill="#C6FF00" opacity=".8"/>
+  <rect x="140" y="312" width="30" height="4" fill="#B52CFF"/>
+  <rect x="560" y="200" width="46" height="4" fill="#B52CFF"/>
+  <rect x="580" y="212" width="70" height="4" fill="#C6FF00" opacity=".8"/>
+</svg>

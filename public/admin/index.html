@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#08090B">
+  <title>Панель управления — GLITCH//CORE</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="ad-body">
+  <div class="fx fx-scan" aria-hidden="true"></div>
+  <div class="fx fx-crt" aria-hidden="true"></div>
+
+  <header class="ad-top">
+    <a class="ad-brand" href="../" title="Вернуться на сайт"><span class="brand-logo" id="brand">NOXVOID</span><span class="ad-sub">ПАНЕЛЬ УПРАВЛЕНИЯ</span></a>
+    <div class="ad-top-r">
+      <a class="ad-link" href="../">← На сайт</a>
+      <button class="ad-link" id="logoutBtn" type="button" hidden>Выйти</button>
+    </div>
+  </header>
+
+  <main class="ad-main">
+    <div class="ad-toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <!-- Вход -->
+    <section class="ad-card ad-login" id="loginView" hidden>
+      <h1 class="ad-h">Вход</h1>
+      <form id="loginForm" autocomplete="on">
+        <label class="ad-label" for="password">Пароль администратора</label>
+        <input class="ad-input" id="password" name="password" type="password" autocomplete="current-password" required>
+        <div class="ad-actions"><button class="btn btn-primary" type="submit"><span class="btn-label" data-text="Войти">Войти</span></button></div>
+      </form>
+    </section>
+
+    <!-- Сообщение, если панель недоступна -->
+    <section class="ad-card" id="offlineView" hidden>
+      <h1 class="ad-h">Панель недоступна</h1>
+      <p class="ad-text" id="offlineText"></p>
+      <div class="ad-actions"><button class="btn btn-ghost" id="retryBtn" type="button"><span class="btn-label" data-text="Повторить">Повторить</span></button></div>
+    </section>
+
+    <!-- Панель -->
+    <div id="appView" hidden>
+      <section class="ad-card" id="initView" hidden>
+        <h2 class="ad-h">Расписание ещё не создано</h2>
+        <p class="ad-text">В базе пока нет расписания. Можно создать его из настроек сайта (файл <b>config.js</b>), а дальше менять здесь.</p>
+        <div class="ad-actions"><button class="btn btn-primary" id="initBtn" type="button"><span class="btn-label" data-text="Создать расписание из config.js">Создать расписание из config.js</span></button></div>
+      </section>
+
+      <div id="panels">
+        <section class="ad-card" aria-labelledby="h-next">
+          <h2 class="ad-h" id="h-next">Ближайший стрим</h2>
+          <div id="nextBox"></div>
+        </section>
+
+        <section class="ad-card" aria-labelledby="h-up" id="upCard" hidden>
+          <h2 class="ad-h" id="h-up">Следующие стримы</h2>
+          <ul class="ad-list" id="upList"></ul>
+        </section>
+
+        <section class="ad-card" aria-labelledby="h-chg">
+          <h2 class="ad-h" id="h-chg">Изменения расписания</h2>
+          <ul class="ad-list" id="chgList"></ul>
+          <p class="ad-text ad-muted" id="chgEmpty">Разовых изменений нет — действует регулярное расписание.</p>
+        </section>
+
+        <section class="ad-card" aria-labelledby="h-week">
+          <h2 class="ad-h" id="h-week">Регулярное расписание</h2>
+          <p class="ad-text ad-muted" id="tzNote"></p>
+          <div class="ad-week" id="weekList"></div>
+        </section>
+
+        <section class="ad-card" aria-labelledby="h-live">
+          <h2 class="ad-h" id="h-live">Статус трансляции</h2>
+          <div id="liveBox"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Форма переноса -->
+  <div class="modal" id="moveModal" role="dialog" aria-modal="true" aria-labelledby="moveTitle" hidden>
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h2 id="moveTitle">Перенести стрим</h2>
+        <button class="modal-close" id="moveClose" type="button" aria-label="Закрыть">✕</button>
+      </div>
+      <p class="ad-text" id="moveInfo"></p>
+      <form id="moveForm" novalidate>
+        <label class="ad-label" for="moveDate">Новая дата</label>
+        <input class="ad-input" id="moveDate" type="date" required>
+        <label class="ad-label" for="moveTime">Новое время</label>
+        <input class="ad-input" id="moveTime" type="time" required>
+        <p class="ad-err" id="moveErr" role="alert" hidden></p>
+        <div class="ad-actions">
+          <button class="btn btn-primary" id="moveSave" type="submit"><span class="btn-label" data-text="Сохранить изменения">Сохранить изменения</span></button>
+          <button class="btn btn-ghost" id="moveCancel" type="button"><span class="btn-label" data-text="Отмена">Отмена</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

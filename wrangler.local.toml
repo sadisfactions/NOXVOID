@@ -1,0 +1,10 @@
+﻿# ТОЛЬКО для локальной проверки (npm run dev). Cloudflare этот файл не использует:
+# на Cloudflare привязка базы и секреты задаются в настройках проекта Pages.
+name = "glitch-core-local"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "glitch-core-local"
+database_id = "00000000-0000-0000-0000-000000000000"
