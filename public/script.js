@@ -29,7 +29,6 @@
   });
   $$(".btn-label").forEach(function (l) { l.setAttribute("data-text", l.textContent); });
   $$(".brand-logo").forEach(function (l) { l.setAttribute("data-text", l.textContent); });
-  setLive(!!cfg.statusLive);   // начальное значение из config.js; дальше его заменяет статус из панели управления
 
   /* ---------- 1b. Расписание ---------- */
   // Источник данных: сначала config.js (запасной вариант и работа без сервера),
@@ -153,13 +152,24 @@
   function cdStop() { clearInterval(cdTimer); cdTimer = 0; }
   cdStart(); renderNext();
 
-  // Ручной статус «в эфире» (config.js -> statusLive, затем переключатель в панели управления)
-  function setLive(on) {
-    doc.body.classList.toggle("is-live", on);
-    var lt = $("#liveText"); if (lt) lt.textContent = on ? "да" : "нет";
-    var st = $('.status [data-bind="statusText"]'); if (st) st.textContent = on ? "В ЭФИРЕ" : (cfg.statusText || "");
-    var nk = $(".next-k"); if (nk) nk.textContent = on ? "В ЭФИРЕ · СЛЕДУЮЩИЙ СТРИМ" : "СЛЕДУЮЩИЙ СТРИМ";
+  // Статус эфира. Состояния: "live" | "offline" | "unknown" (источник данных неизвестен — не выдаём его за «офлайн»).
+  // Начальное значение — config.js (statusLive), затем его заменяет ответ сервера (ручной переключатель или Twitch).
+  // Все места на странице (шапка, расписание, нижняя строка) обновляются отсюда, поэтому не противоречат друг другу.
+  var LIVE_TEXT = {
+    live:    { label: "В ЭФИРЕ",             strip: "да",        next: "В ЭФИРЕ · СЛЕДУЮЩИЙ СТРИМ" },
+    offline: { label: "НЕ В ЭФИРЕ",          strip: "нет",       next: "СЛЕДУЮЩИЙ СТРИМ" },
+    unknown: { label: "СТАТУС УТОЧНЯЕТСЯ",   strip: "нет данных", next: "СЛЕДУЮЩИЙ СТРИМ" }
+  };
+  function setLive(st) {
+    if (st === true) st = "live"; else if (!LIVE_TEXT[st]) st = "offline";
+    var t = LIVE_TEXT[st];
+    doc.body.classList.toggle("is-live", st === "live");
+    doc.body.classList.toggle("is-unknown", st === "unknown");
+    var set = function (sel, v) { var e = $(sel); if (e && e.textContent !== v) e.textContent = v; };
+    set("#statusLabel", t.label); set("#liveChipText", t.label); set("#liveText", t.strip); set(".next-k", t.next);
+    var chip = $("#liveChip"); if (chip) chip.setAttribute("aria-label", "Статус трансляции: " + t.label);
   }
+  setLive(!!cfg.statusLive);
 
   /* ---------- 1d. Актуальное расписание из панели управления ---------- */
   // Работает только на сайте по http(s). Если API недоступен или пуст — остаются данные из config.js.
@@ -187,7 +197,7 @@
           cdStop();
           if (doc.hidden) renderNext(); else cdStart();
         }
-        setLive(!!(data.live && data.live.on));
+        setLive(data.live && (data.live.state || (data.live.on ? "live" : "offline")));
       })
       .catch(function () { /* сеть или сервер недоступны — оставляем последние известные данные */ })
       .then(function () { clearTimeout(t); remote.busy = false; remote.last = Date.now(); });

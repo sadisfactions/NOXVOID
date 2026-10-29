@@ -80,9 +80,32 @@ p, h1 { margin: 0; }
 .is-live #liveText { color: var(--lime); }
 .strip-next b { color: var(--lime); }
 
+/* ---------- Статус эфира: В ЭФИРЕ / НЕ В ЭФИРЕ / статус уточняется ---------- */
+.status-label { letter-spacing: .12em; color: var(--muted); }
+.status-note { color: var(--muted); opacity: .7; }
+.status-note:not(:empty)::before { content: "·"; margin-right: 9px; }
+.status-note:empty { display: none; }
+.live-chip {
+  display: inline-flex; align-items: center; gap: 7px; margin-right: auto;
+  padding: 2px 8px; border: 1px solid var(--line);
+  font-size: 10px; letter-spacing: .14em; white-space: nowrap; color: var(--muted);
+}
+.is-unknown .dot { background: transparent; box-shadow: inset 0 0 0 1px var(--muted); }
+.is-live .status-label, .is-live .live-chip { color: var(--lime); }
+.is-live .status-label { text-shadow: 0 0 10px rgba(198, 255, 0, .55); font-weight: 700; }
+.is-live .live-chip { border-color: rgba(198, 255, 0, .55); background: rgba(198, 255, 0, .08); box-shadow: 0 0 14px rgba(198, 255, 0, .22); }
+.is-live .status .dot, .is-live .live-chip .dot { animation: live-glow 1.8s ease-in-out infinite; }
+.is-live .next { border-color: rgba(198, 255, 0, .55); box-shadow: 0 0 18px rgba(198, 255, 0, .14); }
+.is-live .next-k { color: var(--lime); }
+@keyframes live-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px 0 rgba(198, 255, 0, .9); }
+  50% { opacity: .55; box-shadow: 0 0 10px 3px rgba(198, 255, 0, .55); }
+}
+@media (max-width: 1280px) { .status-note { display: none; } }
+
 /* ---------- Расписание ---------- */
 .sched { margin-top: clamp(8px, 2.2vh, 26px); width: min(100%, clamp(520px, 34vw, 660px)); }
-.sched-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.sched-head { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; margin-bottom: 8px; }
 .sched-head h2 {
   margin: 0; display: flex; align-items: center; gap: 10px;
   font-size: clamp(10px, 1.3vh, 12px); font-weight: 700; letter-spacing: .2em; color: var(--text);

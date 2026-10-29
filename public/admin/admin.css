@@ -85,3 +85,5 @@
   .ad-actions .btn { flex: 1 1 100%; }
   .ad-row-a .btn { flex: 1; }
 }
+
+.ad-mode { margin-bottom: 12px; }

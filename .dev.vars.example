@@ -2,3 +2,13 @@
 # На Cloudflare эти значения задаются в Settings -> Variables and Secrets.
 ADMIN_PASSWORD=поменяйте-на-свой-пароль
 SESSION_SECRET=случайная-строка-не-короче-32-символов
+
+# Необязательно: автоматический статус «в эфире» через Twitch (см. DEPLOY.md, шаг 11).
+# Без этих трёх значений статус переключается вручную в панели.
+# TWITCH_CLIENT_ID=
+# TWITCH_CLIENT_SECRET=
+# TWITCH_LOGIN=ваш_логин_на_twitch
+
+# Только для автотестов (tests/twitch-integration.mjs): адреса поддельного Twitch. На Cloudflare НЕ задавайте.
+# TWITCH_AUTH_URL=http://127.0.0.1:8799
+# TWITCH_API_URL=http://127.0.0.1:8799

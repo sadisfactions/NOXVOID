@@ -197,8 +197,29 @@
 
   function renderLive() {
     var box = $("#liveBox"); clear(box);
+    var ls = state.liveStatus || { mode: "manual", twitchConfigured: false };
     var live = state.schedule.live || { on: false };
     var since = "";
+
+    // выбор источника статуса
+    var auto = ls.mode === "twitch";
+    box.appendChild(h("div", { class: "ad-row-a ad-mode" },
+      btn("Вручную", auto ? "btn-ghost" : "btn-primary", function (b) { if (auto) setMode("manual", b); }),
+      btn("Twitch (авто)", auto ? "btn-primary" : "btn-ghost", function (b) { if (!auto) setMode("twitch", b); })));
+
+    if (auto) {
+      var names = { live: "СЕЙЧАС В ЭФИРЕ", offline: "НЕ В ЭФИРЕ", unknown: "СТАТУС НЕИЗВЕСТЕН" };
+      var checked = ls.checkedAt ? "Проверено в " + new Intl.DateTimeFormat("ru-RU", { timeZone: state.schedule.timezone, hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date(ls.checkedAt)) + " (" + tzLabel() + ")." : "Успешных проверок пока не было.";
+      box.appendChild(h("div", { class: "ad-sw" },
+        h("div", {}, h("div", { class: "ad-state" + (ls.state === "live" ? " live" : "") }, h("span", { class: "dot" }), names[ls.state] || names.unknown),
+          h("p", { class: "ad-text ad-muted", text: "Определяется автоматически по каналу twitch.tv/" + (ls.twitchLogin || "?") + ". " + checked }))));
+      if (ls.error) box.appendChild(h("p", { class: "ad-text", text: "⚠ " + ls.error + (ls.state === "unknown" ? " Пока данных нет, на сайте показано «Статус уточняется»." : " Показан последний полученный результат.") }));
+      box.appendChild(h("p", { class: "ad-text ad-muted", text: "Сервер сверяется с Twitch примерно раз в минуту; на сайте статус обновляется в течение 1–2 минут. Если Twitch недоступен, сайт не выдаёт это за «не в эфире». Ручной переключатель в этом режиме не действует." }));
+      return;
+    }
+    if (!ls.twitchConfigured) {
+      box.appendChild(h("p", { class: "ad-text ad-muted", text: "Автоматический режим не настроен: нужны TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET и TWITCH_LOGIN в настройках Cloudflare (инструкция в DEPLOY.md). Пока статус переключается вручную." }));
+    }
     if (live.on && live.since) {
       var hours = (new Date(state.serverNow) - new Date(live.since)) / 3600000;
       since = "Включён " + new Intl.DateTimeFormat("ru-RU", { timeZone: state.schedule.timezone, day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(live.since)) + " (" + tzLabel() + ")";
@@ -211,6 +232,12 @@
         act(b, "/api/admin/live", { on: !live.on }, function () { ok(live.on ? "Статус выключен." : "Статус «В эфире» включён.", "На сайте он обновится в течение минуты."); });
       })));
     box.appendChild(h("p", { class: "ad-text ad-muted", text: "Статус не зависит от расписания и сам не выключается: его включаете и выключаете вы." }));
+  }
+
+  function setMode(mode, b) {
+    act(b, "/api/admin/status-mode", { mode: mode }, function () {
+      ok(mode === "twitch" ? "Статус теперь определяется по Twitch." : "Статус переключается вручную.", "На сайте он обновится в течение 1–2 минут.");
+    });
   }
 
   /* ---------- действия ---------- */

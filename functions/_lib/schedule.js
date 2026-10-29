@@ -3,7 +3,7 @@
 // { timezone, timezoneLabel,
 //   days: [7 × { short, full, active, start, end }],      // регулярный план ПН..ВС
 //   overrides: [{ date, active, start?, end?, moveId? }],  // разовые изменения по датам
-//   live: { on, since } }                                  // ручной статус «в эфире»
+//   live: { on, since, mode? } }                           // ручной статус «в эфире»; mode: "manual" (по умолчанию) | "twitch"
 
 export class ApiError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code; }
@@ -132,15 +132,28 @@ export function sanitizeSchedule(input) {
   };
 }
 
+export const statusMode = (doc) => (doc.live && doc.live.mode === "twitch" ? "twitch" : "manual");
+
+// Итоговый статус эфира для сайта. Источник — ручной переключатель или Twitch (twitch = результат twitchStatus).
+// state: "live" | "offline" | "unknown"; on — true только при state === "live".
+export function liveStatus(doc, twitch) {
+  const live = doc.live || {};
+  if (statusMode(doc) === "twitch") {
+    const state = twitch && twitch.state ? twitch.state : "unknown";
+    return { on: state === "live", state, source: "twitch", since: null };
+  }
+  return { on: !!live.on, state: live.on ? "live" : "offline", source: "manual", since: live.since || null };
+}
+
 // Что видит любой посетитель сайта
-export function publicView(doc, version) {
+export function publicView(doc, version, twitch) {
   return {
     version,
     timezone: doc.timezone,
     timezoneLabel: doc.timezoneLabel,
     days: doc.days,
     overrides: doc.overrides.map((o) => ({ date: o.date, active: o.active, start: o.start, end: o.end })),
-    live: doc.live || { on: false, since: null },
+    live: liveStatus(doc, twitch),
   };
 }
 
@@ -239,6 +252,13 @@ export function setWeekly(doc, args) {
 
 export function setLive(doc, args, now = new Date()) {
   if (!args || typeof args.on !== "boolean") throw err(400, "bad_data", "Неверный статус.");
-  doc.live = args.on ? { on: true, since: now.toISOString() } : { on: false, since: null };
+  doc.live = { ...doc.live, ...(args.on ? { on: true, since: now.toISOString() } : { on: false, since: null }) };
+  return doc;
+}
+
+// Источник статуса: "manual" (переключатель в панели) или "twitch" (автоматически)
+export function setStatusMode(doc, args) {
+  if (!args || (args.mode !== "manual" && args.mode !== "twitch")) throw err(400, "bad_data", "Неверный режим статуса.");
+  doc.live = { ...doc.live, mode: args.mode };
   return doc;
 }

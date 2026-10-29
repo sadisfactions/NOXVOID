@@ -2,7 +2,8 @@
 // Кэш: 15 секунд в дата-центре (Cache API) + ETag, поэтому браузер получает 304 без тела, а база читается редко.
 import { json, fail, handle } from "../_lib/http.js";
 import { loadDoc } from "../_lib/store.js";
-import { publicView } from "../_lib/schedule.js";
+import { publicView, statusMode } from "../_lib/schedule.js";
+import { twitchStatus } from "../_lib/twitch.js";
 
 const EDGE_TTL = 15;
 
@@ -14,9 +15,10 @@ export const onRequestGet = handle(async ({ request, env }) => {
   if (!res) {
     const cur = await loadDoc(env.DB);
     if (!cur) return fail(404, "not_initialized", "Расписание ещё не создано.");
-    const body = JSON.stringify(publicView(cur.doc, cur.version));
-    res = new Response(body, {
-      headers: { "Content-Type": "application/json; charset=utf-8", ETag: `"${cur.version}"`, "Cache-Control": `public, max-age=${EDGE_TTL}` },
+    const twitch = statusMode(cur.doc) === "twitch" ? await twitchStatus(env) : null;   // не бросает ошибок; не чаще раза в минуту
+    const view = publicView(cur.doc, cur.version, twitch);
+    res = new Response(JSON.stringify(view), {
+      headers: { "Content-Type": "application/json; charset=utf-8", ETag: `"${cur.version}-${view.live.state}"`, "Cache-Control": `public, max-age=${EDGE_TTL}` },
     });
     await cache.put(key, res.clone());
   }

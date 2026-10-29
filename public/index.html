@@ -26,7 +26,7 @@
         <a class="soc" data-link="twitch" href="#" target="_blank" rel="noopener noreferrer">Twitch</a>
         <a class="soc" data-link="youtube" href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a class="soc" data-link="telegram" href="#" target="_blank" rel="noopener noreferrer">Telegram</a>
-        <span class="status"><span class="dot" aria-hidden="true"></span><span data-bind="statusText">ДЕМО-ДАННЫЕ</span></span>
+        <span class="status"><span class="dot" aria-hidden="true"></span><span class="status-label" id="statusLabel">НЕ В ЭФИРЕ</span><span class="status-note" data-bind="statusText">ДЕМО-ДАННЫЕ</span></span>
       </nav>
     </header>
 
@@ -53,6 +53,7 @@
         <section class="sched" aria-labelledby="sched-title">
           <div class="sched-head">
             <h2 id="sched-title">РАСПИСАНИЕ СТРИМОВ</h2>
+            <span class="live-chip" id="liveChip" role="status"><span class="dot dot-sm" aria-hidden="true"></span><span id="liveChipText">НЕ В ЭФИРЕ</span></span>
             <span class="sched-tz" id="schedTz"></span>
           </div>
           <div class="next">
