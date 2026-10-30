@@ -20,7 +20,7 @@
     if (v != null) el.textContent = v;
   });
   if (cfg.nickname) {
-    doc.title = "GLITCH//CORE — " + cfg.nickname;
+    doc.title = cfg.nickname + " — стример Dota 2";
     $("#nick").setAttribute("aria-label", cfg.nickname);
   }
   $$("[data-link]").forEach(function (a) {
@@ -166,8 +166,8 @@
     doc.body.classList.toggle("is-live", st === "live");
     doc.body.classList.toggle("is-unknown", st === "unknown");
     var set = function (sel, v) { var e = $(sel); if (e && e.textContent !== v) e.textContent = v; };
-    set("#statusLabel", t.label); set("#liveChipText", t.label); set("#liveText", t.strip); set(".next-k", t.next);
-    var chip = $("#liveChip"); if (chip) chip.setAttribute("aria-label", "Статус трансляции: " + t.label);
+    set("#statusLabel", t.label); set("#liveChipText", t.label); set("#liveBadgeText", t.label); set("#liveText", t.strip); set(".next-k", t.next);
+    ["#liveChip", "#liveBadge"].forEach(function (s) { var e = $(s); if (e) e.setAttribute("aria-label", "Статус трансляции: " + t.label); });
   }
   setLive(!!cfg.statusLive);
 
@@ -219,7 +219,27 @@
   }
 
   var heroSrc = cfg.heroImage || "assets/hero-placeholder.svg";
+  // Мягкая подсветка глаз героя (config.js -> heroEyes). Позиция считается по реальному положению
+  // картинки внутри блока (object-fit: contain + object-position), поэтому верна на любом экране.
+  var eyeEl = $("#eyeGlow"), eyeCfg = cfg.heroEyes, heroBase = $("#heroImg");
+  function placeEyes() {
+    if (!eyeEl) return;
+    if (!eyeCfg || !heroBase.naturalWidth) { eyeEl.hidden = true; return; }
+    var r = heroBase.getBoundingClientRect(), s = Math.min(r.width / heroBase.naturalWidth, r.height / heroBase.naturalHeight);
+    if (!(s > 0)) return;
+    var w = heroBase.naturalWidth * s, h = heroBase.naturalHeight * s;
+    var pos = (getComputedStyle(heroBase).objectPosition || "50% 50%").split(" ");
+    var x = (r.width - w) * (parseFloat(pos[0]) / 100) + w * eyeCfg.x;
+    var y = (r.height - h) * (parseFloat(pos[1]) / 100) + h * eyeCfg.y;
+    var st = $("#artFloat").style;
+    st.setProperty("--eye-x", x.toFixed(1) + "px"); st.setProperty("--eye-y", y.toFixed(1) + "px"); st.setProperty("--eye-s", Math.max(24, w * .075).toFixed(1) + "px");
+    eyeEl.hidden = false;
+  }
+  var eyeRaf = 0;
+  heroBase.addEventListener("load", placeEyes);
+  window.addEventListener("resize", function () { cancelAnimationFrame(eyeRaf); eyeRaf = requestAnimationFrame(placeEyes); });
   $$(".layer, .slice img").forEach(function (img) { img.src = heroSrc; });
+  if (heroBase.complete) placeEyes();
   $("#heroImg").alt = cfg.heroAlt || "Арт героя";
   root.style.setProperty("--hero", 'url("' + heroSrc + '")');
   doc.documentElement.classList.add("js");
@@ -261,6 +281,7 @@
     a.classList.add("reveal"); a.style.transitionDelay = (i % 3) * 80 + "ms";
     $("#momentsGrid").appendChild(a);
   });
+  if ($("#momentsGrid")) $("#momentsGrid").setAttribute("data-count", $("#momentsGrid").children.length);   // CSS подбирает число колонок
   // Появление секций при прокрутке
   var revealEls = $$(".reveal");
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
