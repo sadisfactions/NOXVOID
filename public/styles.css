@@ -771,7 +771,7 @@ button.btn-ghost { border: 1px solid rgba(244, 244, 244, .28); }
 }
 /* ---------- Свечение ника и слогана (только text-shadow, без обводки и постоянной пульсации) ---------- */
 .nick > span:first-child {
-  text-shadow: 0 0 .04em rgba(181, 44, 255, .5), 0 0 .12em rgba(181, 44, 255, .75), 0 0 .3em rgba(181, 44, 255, .65), 0 0 .7em rgba(181, 44, 255, .42);
+  text-shadow: 0 0 .04em rgba(181, 44, 255, .20), 0 0 .12em rgba(181, 44, 255, .30), 0 0 .3em rgba(181, 44, 255, .27), 0 0 .7em rgba(181, 44, 255, .17);
 }
 .slogan {
   text-shadow: 0 0 .3em rgba(198, 255, 0, .6), 0 0 .8em rgba(198, 255, 0, .38), 0 0 1.7em rgba(198, 255, 0, .2);
