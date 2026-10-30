@@ -1,12 +1,12 @@
 /* ==========================================================
-   GLITCH//CORE — конфигурация. Меняйте только этот файл.
+   NOXVOID — конфигурация сайта. Меняйте только этот файл.
    ========================================================== */
 window.GLITCH_CONFIG = {
   nickname: "NOXVOID",
   category: "СТРИМЕР DOTA 2",
   slogan: "NO META. NO MERCY.",
   rank: "РАНГ: БЕССМЕРТНЫЙ",
-  playerId: "ИГРОК_001",
+  playerId: "МИД · ОФФЛЕЙН",      // короткая подпись в нижней строке
 
   watchLabel: "Смотреть стрим",
   socialsLabel: "Мои сети",
@@ -23,15 +23,16 @@ window.GLITCH_CONFIG = {
   // Текст внизу страницы
   footer: "© NOXVOID · стример Dota 2",
 
-  // Ссылки — PLACEHOLDER, замените на реальные адреса.
+  // Ссылки. Сейчас это ДЕМО-адреса: главные страницы платформ (они открываются, но не принадлежат стримеру).
+  // Замените на адреса канала клиента. Пустая строка или адрес с "your_channel" — кнопка скрывается.
   links: {
-    twitch: "https://www.twitch.tv/your_channel",
-    youtube: "https://www.youtube.com/@your_channel",
-    telegram: "https://t.me/your_channel",
-    highlights: "https://www.youtube.com/@your_channel/videos",
-    donate: "https://www.donationalerts.com/r/your_channel",   // DonationAlerts
-    boosty: "https://boosty.to/your_channel",                   // Boosty
-    discord: "https://discord.gg/your_invite",                  // Discord (пустая строка "" — пункт скрыт)
+    twitch: "https://www.twitch.tv/",
+    youtube: "https://www.youtube.com/",
+    telegram: "https://telegram.org/",
+    highlights: "https://www.youtube.com/",
+    donate: "https://www.donationalerts.com/",   // DonationAlerts
+    boosty: "https://boosty.to/",                   // Boosty
+    discord: "https://discord.com/",                  // Discord (пустая строка "" — пункт скрыт)
   },
 
   // true — на сайте показываются пометки «ДЕМО-ДАННЫЕ» у секций. Поставьте false, когда заполните реальными.
@@ -51,11 +52,12 @@ window.GLITCH_CONFIG = {
           "было что посмотреть, а потом начали заходить незнакомые люди — так и пошло. " +
           "Чаще всего беру мид или оффлейн, люблю странные сборки, за которые в паблике потом пишут «репорт». " +
           "Тильтую, выигрываю, проигрываю — всё как есть, без монтажа.",
+    // Демонстрационные факты без цифр аудитории и достижений. Замените на данные клиента.
     facts: [
-      { k: "В ДОТЕ С",      v: "2013" },
-      { k: "ЧАЩЕ ВСЕГО",    v: "Nyx Assassin, Spectre, Storm Spirit" },
-      { k: "ПИК ОНЛАЙНА",   v: "12 480" },
-      { k: "ЧАСОВ В МЕСЯЦ", v: "около 96" },
+      { k: "ИГРАЕТ В",       v: "Dota 2" },
+      { k: "ЛЮБИМЫЕ ГЕРОИ",  v: "Nyx Assassin, Spectre, Storm Spirit" },
+      { k: "ПОЗИЦИИ",        v: "Мид, оффлейн" },
+      { k: "ФОРМАТ",         v: "Вечерние эфиры без монтажа" },
     ],
   },
 

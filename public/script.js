@@ -1,4 +1,4 @@
-/* GLITCH//CORE — config binding + glitch scheduler.
+/* NOXVOID — config binding + glitch scheduler.
    Эффекты запускаются редкими событиями через setTimeout (не rAF-цикл)
    и анимируются через Web Animations API (transform/opacity/clip-path). */
 (function () {
@@ -23,9 +23,11 @@
     doc.title = cfg.nickname + " — стример Dota 2";
     $("#nick").setAttribute("aria-label", cfg.nickname);
   }
+  // Рабочий адрес: http(s) и не шаблонный («your_channel», «your_invite»). Иначе кнопка скрывается, а не ведёт в никуда.
+  var realUrl = function (u) { return typeof u === "string" && /^https?:\/\//i.test(u) && !/your_(channel|invite)/i.test(u) ? u : ""; };
   $$("[data-link]").forEach(function (a) {
-    var url = cfg.links && cfg.links[a.getAttribute("data-link")];
-    if (url) a.href = url;
+    var url = realUrl(cfg.links && cfg.links[a.getAttribute("data-link")]);
+    if (url) a.href = url; else a.hidden = true;
   });
   $$(".btn-label").forEach(function (l) { l.setAttribute("data-text", l.textContent); });
   $$(".brand-logo").forEach(function (l) { l.setAttribute("data-text", l.textContent); });
@@ -269,8 +271,9 @@
   var thumbPos = ["60% 6%", "20% 30%", "80% 15%", "50% 40%", "35% 8%", "70% 55%"];
   ($("#momentsGrid") ? (cfg.highlights || []) : []).slice(0, 6).forEach(function (h, i) {
     var a = el("a", "clip");
-    a.href = h.url || (cfg.links && cfg.links.highlights) || "#";
-    a.target = "_blank"; a.rel = "noopener noreferrer";
+    var clipUrl = realUrl(h.url) || realUrl(cfg.links && cfg.links.highlights);
+    if (clipUrl) { a.href = clipUrl; a.target = "_blank"; a.rel = "noopener noreferrer"; }
+    else a.className += " clip-static";           // без адреса карточка не притворяется ссылкой
     var th = el("div", "thumb");
     if (h.thumb) { th.style.backgroundImage = 'url("' + h.thumb + '")'; th.style.backgroundSize = "cover"; th.style.backgroundPosition = "center"; }
     else { th.style.setProperty("--pos", thumbPos[i % thumbPos.length]); th.style.setProperty("--zoom", (150 + (i % 3) * 25) + "%"); }
@@ -567,7 +570,7 @@
       var m = modes[mode];
       titleEl.textContent = m.title; noteEl.textContent = m.note; list.textContent = "";
       m.items.forEach(function (n) {
-        if (!n[1]) return;
+        if (!realUrl(n[1])) return;
         var li = doc.createElement("li"), a = doc.createElement("a");
         a.className = "modal-link"; a.href = n[1]; a.target = "_blank"; a.rel = "noopener noreferrer";
         var nm = doc.createElement("span"); nm.className = "ml-name"; nm.textContent = n[0]; nm.setAttribute("data-text", n[0]);
