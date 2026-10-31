@@ -6,3 +6,4 @@ node_modules/
 .env.*
 !.dev.vars.example
 *.log
+HANDOFF.md

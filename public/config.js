@@ -13,12 +13,20 @@ window.GLITCH_CONFIG = {
   supportLabel: "Поддержать",         // кнопка в первом экране -> окно с донатом
 
   // Путь к арту героя. Лучше PNG/WebP с прозрачным фоном (вырез героя), ~1000×1300.
-  // Сейчас — «Призрак Бездны». Прежняя SVG-заглушка осталась в assets/hero-placeholder.svg.
-  heroImage: "assets/abyss-wraith.webp",
+  // Сейчас — «Призрак Бездны» (abyss-wraith-refined.webp): плотное тело, фон просвечивает только через широкие внутренние полости. Резервные копии: abyss-wraith-open.webp (больше прозрачности), abyss-wraith.webp (сплошные чёрные зоны) и hero-placeholder.svg.
+  heroImage: "assets/abyss-wraith-refined.webp",
   heroAlt: "Призрак Бездны: тёмный силуэт в капюшоне с фиолетовым плащом и зелёными глазами",
   // Положение глаз на арте (доли ширины и высоты картинки, 0–1) для мягкой зелёной подсветки.
   // Уберите строку, если у нового арта нет светящихся глаз.
   heroEyes: { x: 0.694, y: 0.167 },
+
+  // SEO и превью ссылки. Эти значения подставляет в index.html команда `npm run brand` (запускать после правки).
+  siteUrl: "https://noxvoid.pages.dev/",     // полный адрес сайта (или свой домен), с https:// и слэшем в конце
+  seo: {
+    title: "NOXVOID — стример Dota 2",       // заголовок вкладки, og:title, twitter:title
+    description: "NOXVOID — стример Dota 2. Расписание трансляций по МСК, ссылки на Twitch, YouTube и Telegram, лучшие моменты.",
+    shareDescription: "NO META. NO MERCY. Расписание стримов по МСК, Twitch, YouTube и Telegram.",   // og:description, twitter:description
+  },
 
   // Текст внизу страницы
   footer: "© NOXVOID · стример Dota 2",

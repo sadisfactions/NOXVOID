@@ -20,7 +20,7 @@
     if (v != null) el.textContent = v;
   });
   if (cfg.nickname) {
-    doc.title = cfg.nickname + " — стример Dota 2";
+    doc.title = (cfg.seo && cfg.seo.title) || cfg.nickname;
     $("#nick").setAttribute("aria-label", cfg.nickname);
   }
   // Рабочий адрес: http(s) и не шаблонный («your_channel», «your_invite»). Иначе кнопка скрывается, а не ведёт в никуда.
@@ -115,6 +115,12 @@
     });
   }
   renderWeek();
+  // После полуночи (по поясу расписания) обновляем «СЕГОДНЯ» и подсветку дня без перезагрузки страницы.
+  var shownDay = tzNow().dayNum;
+  setInterval(function () {
+    var d = tzNow().dayNum;
+    if (d !== shownDay) { shownDay = d; renderWeek(); }
+  }, 5000);
 
   // «Следующий стрим» считается по плану (с учётом разовых изменений); это не статус эфира.
   function nextStream() {
@@ -171,7 +177,11 @@
     set("#statusLabel", t.label); set("#liveChipText", t.label); set("#liveBadgeText", t.label); set("#liveText", t.strip); set(".next-k", t.next);
     ["#liveChip", "#liveBadge"].forEach(function (s) { var e = $(s); if (e) e.setAttribute("aria-label", "Статус трансляции: " + t.label); });
   }
-  setLive(!!cfg.statusLive);
+  // Если сайт уже получал статус из Twitch, до ответа сервера (и при его недоступности) показываем «уточняется», а не «НЕ В ЭФИРЕ».
+  var SRC_KEY = "nx-status-source";
+  var lastSrc = ""; try { lastSrc = localStorage.getItem(SRC_KEY) || ""; } catch (e) { /* хранилище недоступно */ }
+  var rememberSrc = function (v) { try { if (v) localStorage.setItem(SRC_KEY, v); else localStorage.removeItem(SRC_KEY); } catch (e) { /* не страшно */ } };
+  setLive(lastSrc === "twitch" ? "unknown" : !!cfg.statusLive);
 
   /* ---------- 1d. Актуальное расписание из панели управления ---------- */
   // Работает только на сайте по http(s). Если API недоступен или пуст — остаются данные из config.js.
@@ -189,9 +199,13 @@
     var ctl = window.AbortController ? new AbortController() : null;
     var t = setTimeout(function () { if (ctl) ctl.abort(); }, 8000);
     fetch("/api/schedule", { cache: "no-cache", signal: ctl ? ctl.signal : undefined })
-      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (res) {
+        if (res.status === 404) { rememberSrc(""); if (lastSrc === "twitch") { lastSrc = ""; setLive(!!cfg.statusLive); } }   // панель не настроена — работает config.js
+        return res.ok ? res.json() : null;
+      })
       .then(function (data) {
         if (!validRemote(data)) return;
+        lastSrc = data.live && data.live.source === "twitch" ? "twitch" : ""; rememberSrc(lastSrc);
         if (data.version !== remote.version) {
           remote.version = data.version;
           setSchedule(data);
@@ -245,6 +259,9 @@
   $("#heroImg").alt = cfg.heroAlt || "Арт героя";
   root.style.setProperty("--hero", 'url("' + heroSrc + '")');
   doc.documentElement.classList.add("js");
+  // Фон-призраки подгружается после основной страницы и плавно проявляется (не мешает первой отрисовке)
+  var bgReady = function () { setTimeout(function () { root.classList.add("bg-ready"); }, 120); };
+  if (doc.readyState === "complete") bgReady(); else window.addEventListener("load", bgReady);
   var slogan = $("#slogan"); slogan.setAttribute("data-text", slogan.textContent);
   $$(".sec-title").forEach(function (t) { t.setAttribute("data-text", t.textContent); });
   $$("[data-demo]").forEach(function (t) { t.hidden = cfg.demo === false; });
@@ -603,7 +620,7 @@
 
     function openMenu(mode, btn) {
       if (busy || isOpen) return;
-      busy = true; lastFocus = doc.activeElement; opener = btn;
+      busy = true; lastFocus = btn; opener = btn;   // возврат фокуса на кнопку-открыватель (Safari/Firefox не фокусируют кнопку по клику)
       fill(mode);
       var finish = function () {
         modal.hidden = false; modal.classList.remove("closing"); modal.classList.add("open");
@@ -637,9 +654,10 @@
       if (!isOpen) return;
       if (e.key === "Escape") { closeMenu(); return; }
       if (e.key === "Tab") {   // фокус остаётся внутри окна
-        var f = $$("a, button", modal);
+        var f = $$("a[href], button", modal);
         var first = f[0], lastEl = f[f.length - 1];
-        if (e.shiftKey && doc.activeElement === first) { e.preventDefault(); lastEl.focus(); }
+        if (!modal.contains(doc.activeElement)) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && doc.activeElement === first) { e.preventDefault(); lastEl.focus(); }
         else if (!e.shiftKey && doc.activeElement === lastEl) { e.preventDefault(); first.focus(); }
       }
     });

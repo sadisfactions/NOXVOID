@@ -29,6 +29,10 @@
 </head>
 <body>
   <div class="boot" aria-hidden="true"></div>
+  <!-- Фон: призрачное пространство (дымка, тени существ, глаза, туман). Только декор, позади всего интерфейса -->
+  <div class="bg-space" aria-hidden="true">
+    <i class="bg-haze"></i><i class="bg-fog bg-fog-a"></i><i class="bg-fog bg-fog-b"></i><i class="bg-vig"></i><canvas class="bg-ghosts"></canvas>
+  </div>
   <div class="fx fx-scan" aria-hidden="true"></div>
   <div class="fx fx-grain" aria-hidden="true"></div>
   <div class="fx fx-flash" aria-hidden="true"></div>
@@ -89,9 +93,9 @@
         <div class="art-glow" aria-hidden="true"></div>
         <div class="art-stack">
           <div class="art-float" id="artFloat">
-            <img class="layer base" id="heroImg" src="assets/abyss-wraith.webp" alt="Призрак Бездны: тёмный силуэт в капюшоне с фиолетовым плащом и зелёными глазами" decoding="async" fetchpriority="high">
-            <img class="layer ch ch-m" src="assets/abyss-wraith.webp" alt="" aria-hidden="true">
-            <img class="layer ch ch-g" src="assets/abyss-wraith.webp" alt="" aria-hidden="true">
+            <img class="layer base" id="heroImg" src="assets/abyss-wraith-refined.webp" alt="Призрак Бездны: тёмный силуэт в капюшоне с фиолетовым плащом и зелёными глазами" decoding="async" fetchpriority="high">
+            <img class="layer ch ch-m" src="assets/abyss-wraith-refined.webp" alt="" aria-hidden="true">
+            <img class="layer ch ch-g" src="assets/abyss-wraith-refined.webp" alt="" aria-hidden="true">
             <div class="slices" id="slices" aria-hidden="true"></div>
             <span class="eye-glow" id="eyeGlow" aria-hidden="true" hidden></span>
           </div>
@@ -146,5 +150,7 @@
   </div>
   <script src="config.js"></script>
   <script src="script.js"></script>
+  <script src="assets/bg/ghosts-data.js" defer></script>
+  <script src="bg-ghosts.js" defer></script>
 </body>
 </html>
